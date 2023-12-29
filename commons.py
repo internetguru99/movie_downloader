@@ -9,7 +9,7 @@ import urllib.request
 import requests
 from bs4 import BeautifulSoup
 
-DATABASE_PATH = r'Z:\Utils\Databases\movies.db'
+DATABASE_PATH = r'Z:\Utils\Databases\scenes.db'
 DOWNLOAD_PATH = r'Z:\Downloads\Python'
 # DOWNLOAD_PATH = r'/Users/guru/Downloads'
 # DATABASE_PATH = r'/Users/guru/Desktop/scenes-dev.db'
