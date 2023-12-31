@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 
 DATABASE_PATH = r'Z:\Utils\Databases\scenes.db'
 DOWNLOAD_PATH = r'Z:\Downloads\Python'
+DOWNLOAD_DIRECTORY = r'Z:\Python\Downloading'
 # DOWNLOAD_PATH = r'/Users/guru/Downloads'
 # DATABASE_PATH = r'/Users/guru/Desktop/scenes-dev.db'
 
@@ -111,16 +112,18 @@ def getScenes(downloadStatus):
         conn.execute('PRAGMA wal_checkpoint(TRUNCATE)')
 
         if downloadStatus == 'waiting information':
-            downloadStatus = 'waiting information'
+            downloadStatus = ('waiting information',)
         elif downloadStatus == 'ready to download':
             downloadStatus = ('queued', 'started')
         else:
-            downloadStatus = downloadStatus.lower()
+            downloadStatus = (downloadStatus.lower(),)
 
-        cursor = conn.execute('''
+        query = '''
             SELECT * FROM scenes
             WHERE downloadStatus IN ({})
-        '''.format(','.join('?' for _ in downloadStatus)), downloadStatus)
+        '''.format(','.join('?' for _ in downloadStatus))
+
+        cursor = conn.execute(query, downloadStatus)
 
         columnNames = [description[0] for description in cursor.description]
         rows = cursor.fetchall()
@@ -263,7 +266,8 @@ def prepareSceneToDownload(row, cookies):
         if soup:
 
             sceneDownloadLink = getVideoLink(soup)
-            sceneDownloadLocation = createDirectory(row['network'], row['siteName'], row['fileName'])
+            # sceneDownloadLocation = createDirectory(row['network'], row['siteName'], row['fileName'])
+            sceneDownloadLocation = os.path.join(DOWNLOAD_DIRECTORY, row['fileName'])
 
             downloadStartDate = str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 

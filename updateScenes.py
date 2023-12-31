@@ -1,11 +1,8 @@
 from datetime import datetime
 import logging
-import concurrent.futures
 import commons
 
 commons.setUpLogging()
-
-siteList = []
 
 def getDesiredNetwork(networkList):
     logging.info("Displaying active network subscriptions:")
@@ -107,7 +104,7 @@ def updateSceneInformation(cookies):
             soup = commons.pageParser(row['movieUrl'], cookies)
 
             if soup:
-                logging.info(f"Processing from {row['siteName']} - Item {index}/{total_rows}")
+                logging.info(f"Getting scene information from site: {row['siteName']} - Item {index}/{total_rows}")
 
                 movieName = commons.getMovieName(soup)
                 date = commons.getDate(soup)
@@ -128,7 +125,7 @@ def downloadQueue(cookies):
         total_rows = len(queue)
 
         for index, row in enumerate(queue, start=1):
-            logging.info(f"Processing from {row['siteName']}, movie {row['movieName']} - Download {index} of {total_rows}")
+            logging.info(f"Downloading scene from: {row['siteName']}. Movie: {row['movieName']} - Download {index} of {total_rows}")
             commons.prepareSceneToDownload(row, cookies)
 
 def main():
